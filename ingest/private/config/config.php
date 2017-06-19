@@ -13,6 +13,10 @@ define('PATH_PUBLIC', PATH_BASE . 'public/');
 
 define('KOCHAVA_INGEST_METHODS', 'GET,POST');
 
+define('REDIS_ADR', '127.0.0.1');
+define('REDIS_PORT', '31098');
+define('REDIS_AUTH', 'Isl5dAscpjt91rQFxtoGTVZtCn1P0K0ycXgRXPLs8ill30Sz36Dl0nOMWgJSqpYV');
+
 include(PATH_CONFIG . 'defaults.php');
 
 /* class autoloads */

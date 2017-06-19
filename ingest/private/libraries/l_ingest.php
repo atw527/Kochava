@@ -29,6 +29,8 @@ class l_ingest
 		$methods = array_map('trim', $methods);
 		
 		if (array_search($method, $methods) === false)  throw new Exception('INVALID: endpoint.method');
+		
+		$this->method = $method;
 	}
 	
 	public function setURL(&$url)
@@ -82,7 +84,7 @@ class l_ingest
 	
 	public function getResult()
 	{
-		return $this->url;
+		return array('method' => $this->method, 'url' => $this->url);
 	}
 }
 

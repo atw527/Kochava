@@ -1,6 +1,5 @@
 package main
 
-import "fmt"
 import "github.com/go-redis/redis"
 import "encoding/json"
 import "net/http"

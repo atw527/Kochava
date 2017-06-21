@@ -1,5 +1,6 @@
 package main
 
+import "fmt"
 import "github.com/go-redis/redis"
 import "encoding/json"
 import "net/http"
@@ -17,21 +18,23 @@ func main() {
 		DB:       0,
 	})
 	
-	pubsub := client.Subscribe("waitQueue")
-	defer pubsub.Close()
+	for true {
+		pubsub := client.Subscribe("waitQueue")
+		defer pubsub.Close()
 
-	msg, err := pubsub.ReceiveMessage()
-	if err != nil {
-		panic(err)
-	}
+		msg, err := pubsub.ReceiveMessage()
+		if err != nil {
+			panic(err)
+		}
 	
-	var d Delivery
-	errr := json.Unmarshal([]byte(msg.Payload), &d)
-	if errr != nil {
-		panic(err)
-	}
+		var d Delivery
+		err = json.Unmarshal([]byte(msg.Payload), &d)
+		if err != nil {
+			panic(err)
+		}
 	
-	deliver(d.Method, d.Url)
+		deliver(d.Method, d.Url)
+	}
 }
 
 func deliver(method string, target string) {
@@ -42,5 +45,7 @@ func deliver(method string, target string) {
 	} else {
 		panic("Unsupported delivery method");
 	}
+	
+	fmt.Println("Sent delivery to:", target)
 }
 

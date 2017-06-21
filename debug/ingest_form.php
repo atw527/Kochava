@@ -6,31 +6,36 @@
 	
 	<script type="text/javascript">
 		$(document).ready(function(){
-			var itemPair = $('#data-items').html();
+			var itemPair = $('#data-items').html(); // save this to clone later
 			
+			/* add a new row for the key/val pair */
 			$('#addDataRow').click(function() {
 				$('#data-items').append(itemPair);
 			});
 			
+			/* oops, add to many? */
 			$('#delDataRow').click(function() {
 				$('.data-item').last().remove();
 			});
 			
+			/* HTML form */
 			var form = $('#ingest');
 
 			form.submit(function (e) {
 
-				e.preventDefault();
+				e.preventDefault();  // don't actually submit the form (AJAX, later)
 				
+				/* init the post data object */
 				var fd = {};
 				fd.endpoint = { 'method': $('#endpoint-method').val(), 'url': $('#endpoint-url').val() };
-				
 				fd.data = {};
 				
+				/* loop through the key/val boxes */
 				$('.data-item').each( function() {
 					fd.data[$(this).find('.data-key').val()] = $(this).find('.data-val').val();
 				});
 				
+				/* send the form over via AJAX */
 				$.ajax({
 					type: form.attr('method'),
 					url: form.attr('action'),
@@ -42,7 +47,7 @@
 						console.log(data.responseText);
 					},
 				});
-		});
+			});
 		});
 	</script>
 </head>

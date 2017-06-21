@@ -1,5 +1,11 @@
 <?php
+/**
+ * Receive HTTP POST to kick off the delivery request
+ *
+ * @author  Andrew Wells <andrew@wellsie.net>
+*/
 
+/* all config data & path constants */
 include(dirname(__FILE__) . '/../private/config/config.php');
 
 try /* to validate and set all the input data */
@@ -9,7 +15,8 @@ try /* to validate and set all the input data */
 	{
 		throw new Exception('Missing POST data');
 	}
-
+	
+	/* init the ingest object and validate/add data */
 	$ingest = new l_ingest($defaults);
 	
 	$ingest->setMethod($_POST['endpoint']['method']);
@@ -25,6 +32,7 @@ catch (Exception $ex)
 
 try /* to merge the URL data */
 {
+	/* merging all the key/vals */
 	$ingest->merge();
 }
 catch (Exception $ex)
@@ -34,9 +42,11 @@ catch (Exception $ex)
 	die();
 }
 
+/* load the object to add the delivery request to the processing queue */
 $queue = new m_queue();
 $queue->addTask($ingest->getResult());
 
+/* currently have this for debugging purposes */
 echo $ingest->toJSON();
 
 /* ?> */

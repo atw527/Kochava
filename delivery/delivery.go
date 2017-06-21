@@ -32,12 +32,10 @@ func main() {
 		panic(err)
 	}
 	
-	delivery(d.Method, d.Url)
-	
-	fmt.Println(d.Url, d.Method, msg.Payload)
+	deliver(d.Method, d.Url)
 }
 
-func delivery(method string, target string) {
+func deliver(method string, target string) {
 	if method == "GET" {
 		http.Get(target)
 	} else if method == "POST" {

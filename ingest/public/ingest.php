@@ -37,6 +37,6 @@ catch (Exception $ex)
 $queue = new m_queue();
 $queue->addTask($ingest->getResult());
 
-echo json_encode($ingest->getResult(), JSON_PRETTY_PRINT);
+echo $ingest->toJSON();
 
 /* ?> */

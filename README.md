@@ -1,4 +1,4 @@
-# Server Software
+# Server Config
 
 The three components are separated out in case they need to be on separate boxes, but they can all be on as little as one.
 
@@ -8,7 +8,17 @@ The three components are separated out in case they need to be on separate boxes
 [root]$ apt-get install apache2 php libapache2-mod-php php-redis
 ```
 
-(TODO apache2 config)
+The config is available in the repository, but some settings will vary depending on the desired hostname, etc.
+
+I my example, I used "kochava.agstesting.com" and configured DNS in my separate DNS environment.  Change the domain to something else that's available to you.
+
+The current application config requires SSL, so install Let's Encrypt or use your standard SSL provider.  Don't forget to alter the hostname.
+
+```bash
+[root]$ add-apt-repository ppa:certbot/certbot
+[root]$ apt-get install python-certbot-apache
+[root]$ certbot --apache -d kochava.agstesting.com
+```
 
 ## Redis (mem cache) Server
 
@@ -26,7 +36,7 @@ The config file is not included in the repo - mainly to avoid the password stora
   * Remove/change the bind directive if running on a separate server from ingest/delivery.
   * Uncomment 'requirepass' and add a long password.
 
-Save/close the file.
+Don't forget to restart the service after closing the file.
 
 ```bash
 [root]$ service redis-server start

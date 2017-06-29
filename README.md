@@ -1,8 +1,8 @@
 # Server Config
 
-The three components are separated out in case they need to be on separate boxes, but they can all be on as little as one.
+The three components are separated out in case they need to be on separate boxes, but they can all be installed together.
 
-## Ingest Server
+## Ingest
 
 ```bash
 [root]$ apt-get install apache2 php libapache2-mod-php php-redis
@@ -10,7 +10,7 @@ The three components are separated out in case they need to be on separate boxes
 
 The config is available in the repository, but some settings will vary depending on the desired hostname, etc.
 
-I my example, I used "kochava.agstesting.com" and configured DNS in my separate DNS environment.  Change the domain to something else that's available to you.
+In my example, I used "kochava.agstesting.com" and configured DNS in my separate DNS environment.  Change the domain to something else that's available to you.
 
 The current application config requires SSL, so install Let's Encrypt or use your standard SSL provider.  Don't forget to alter the hostname.
 
@@ -20,7 +20,9 @@ The current application config requires SSL, so install Let's Encrypt or use you
 [root]$ certbot --apache -d kochava.agstesting.com
 ```
 
-## Redis (mem cache) Server
+Let's Encrypt will create the SSL config file - change as necessary.
+
+## Redis (job queue)
 
 ```bash
 [root]$ apt-get install redis-server
@@ -42,7 +44,7 @@ Don't forget to restart the service after closing the file.
 [root]$ service redis-server start
 ```
 
-## Delivery Server
+## Delivery
 
 ```bash
 [root]$ apt-get install golang
@@ -65,6 +67,36 @@ Add this to the end:
 ```
 export GOPATH=$HOME/go
 export PATH=$PATH:$GOROOT/bin:$GOPATH/bin
+```
+
+# Testing
+
+## Ingest
+
+There is a test file located in the debug folder.  Add /debug as an alias in Apache2 of the ingest server to use it.
+
+## Redis/Queue
+
+Fire up the command-line tool.
+
+```bash
+[user]$ redis-cli -p 31098 -a [auth code]
+```
+
+In the cli tool, run 'monitor' to see the commands pass by.
+
+```bash
+127.0.0.1:31098> monitor
+```
+
+## Delivery
+
+The logging of the delivery script is incomplete, but you can use the log files on the destination server to verify the payload was delivered.
+
+In my case, I'm using my local firewall that's also running nginx.
+
+```bash
+[user]$ tail -f /var/log/nginx/access.log
 ```
 
 # TODOs
